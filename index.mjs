@@ -8,7 +8,9 @@ import { Constants } from "./constants.mjs";
 
 const state = {
     posts: [],
-    users: []
+    users: [],
+    data: [], //array di rendering
+    _data: [] //array di cache
 }
 
 const fetchPost = async () => {
@@ -31,9 +33,22 @@ const fetchUsers = async () => {
     }
 }
 
+const formatData = () => {
+    state._data = state.posts.map((post) => {
+        const user = state.users.find((user) => {
+            return post.userId == user.id
+        });
+        return {
+            ...post,
+            author : user.name
+        }
+    })
+}
+
 const init = async () => {
     await fetchPost()
     await fetchUsers()
+    formatData()
     console.log(state)
 }
 
